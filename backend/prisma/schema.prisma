@@ -13,90 +13,42 @@ model User {
     email        String    @unique
     passwordHash String
     createdAt    DateTime  @default(now())
-
-    favorites    FavoritePlayer[]
 }
 
-// USER -> SAVED PLAYERS
-model FavoritePlayer {
-    id        Int    @id @default(autoincrement())
-    userId    Int
-    playerId  Int
-
-    user      User   @relation(fields: [userId], references: [id])
-    player    Player @relation(fields: [playerId], references: [id])
-
-    @@unique([userId, playerId])
-}
-
-// RIOT PLAYER
 model Player {
-    id          Int      @id @default(autoincrement())
-    puuid       String   @unique
-    gameName    String
-    tagLine     String
-    region      String
-    createdAt   DateTime @default(now())
-    lastUpdated DateTime
+    id           Int          @id @default(autoincrement())
+    tag          String       @unique
+    name         String
+    trophies     Int
+    bestTrophies Int
+    wins         Int
+    losses       Int
 
-    matches     MatchPlayer[]
-    ranks       Rank[]
-    favorites   FavoritePlayer[]
+    battles      Battle[]
+    cards        PlayerCard[]
+
+    createdAt    DateTime     @default(now())
 }
 
-// RANK HISTORY
-model Rank {
-    id        Int      @id @default(autoincrement())
+model Battle {
+    id         Int      @id @default(autoincrement())
+
+    playerId   Int
+    player     Player   @relation(fields: [playerId], references: [id])
+
+    result     String
+    crowns     Int
+    gameMode   String
+    createdAt  DateTime @default(now())
+    battleTime DateTime
+}
+
+model PlayerCard {
+    id        Int     @id @default(autoincrement())
+
     playerId  Int
-    tier      String
-    rank      String
-    rr        Int
-    wins      Int
-    updatedAt DateTime @default(now())
+    player    Player  @relation(fields: [playerId], references: [id])
 
-    player    Player   @relation(fields: [playerId], references: [id])
-
-    @@index([playerId])
+    cardName  String
+    level     Int
 }
-
-// MATCH
-model Match {
-    id        Int      @id @default(autoincrement())
-    matchId   String   @unique
-    map       String
-    gameMode  String
-    startedAt DateTime
-    duration  Int
-
-    players   MatchPlayer[]
-}
-
-// PLAYER IN MATCH
-model MatchPlayer {
-    id          Int     @id @default(autoincrement())
-
-    matchId     Int
-    playerId    Int
-
-    agent       String
-    team        String
-
-    kills       Int
-    deaths      Int
-    assists     Int
-
-    score       Int
-    damage      Int
-    econRating  Float
-    firstBloods Int
-
-    won         Boolean
-
-    match       Match   @relation(fields: [matchId], references: [id])
-    player      Player  @relation(fields: [playerId], references: [id])
-
-    @@unique([matchId, playerId])
-    @@index([playerId])
-    @@index([matchId])
-}
-

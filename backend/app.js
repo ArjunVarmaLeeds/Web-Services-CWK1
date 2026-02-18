@@ -4,6 +4,7 @@ import { prisma } from "./src/config/db.js";
 import { swaggerSpec, swaggerUi } from "./src/config/swagger.js";
 import authRoutes from "./src/routes/auth.js"
 import { errorHandler } from "./src/middleware/errorHandler.js";
+import playerRouter from "./src/routes/players.js"
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.get("/health", async (req, res) => {
   await prisma.$queryRaw`SELECT 1`;
   res.send("DB OK");
 });
+
+app.use('/api/player', playerRouter);
 
 app.use(errorHandler);
 
