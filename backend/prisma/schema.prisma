@@ -7,32 +7,35 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// AUTH & USERS
 model User {
-    id           Int       @id @default(autoincrement())
-    email        String    @unique
+    id           Int      @id @default(autoincrement())
+    email        String   @unique
     passwordHash String
-    createdAt    DateTime  @default(now())
+    createdAt    DateTime @default(now())
 }
 
 model Player {
-    id           Int          @id @default(autoincrement())
-    tag          String       @unique
-    name         String
-    trophies     Int
-    bestTrophies Int
-    wins         Int
-    losses       Int
+    id                Int      @id @default(autoincrement())
+    tag               String   @unique
+    name              String
+    trophies          Int
+    bestTrophies      Int
+    wins              Int
+    losses            Int
+    arena             String
+    createdAt         DateTime @default(now())
 
-    battles      Battle[]
-    cards        PlayerCard[]
+    battles           Battle[]
+    cards             PlayerCard[]
 
-    createdAt    DateTime     @default(now())
+    favouriteCardName String?
+    favouriteCard     Card? @relation("FavouriteCard", fields: [favouriteCardName], references: [name])
+
+    currentDeck       PlayerDeck[]
 }
 
 model Battle {
     id         Int      @id @default(autoincrement())
-
     playerId   Int
     player     Player   @relation(fields: [playerId], references: [id])
 
@@ -44,11 +47,38 @@ model Battle {
 }
 
 model PlayerCard {
-    id        Int     @id @default(autoincrement())
-
+    id        Int    @id @default(autoincrement())
     playerId  Int
-    player    Player  @relation(fields: [playerId], references: [id])
-
     cardName  String
     level     Int
+
+    player Player @relation(fields: [playerId], references: [id])
+    card   Card   @relation(fields: [cardName], references: [name])
+
+    @@unique([playerId, cardName])
+}
+
+model PlayerDeck {
+    id        Int    @id @default(autoincrement())
+    playerId  Int
+    cardName  String
+
+    player Player @relation(fields: [playerId], references: [id])
+    card   Card   @relation(fields: [cardName], references: [name])
+
+    @@unique([playerId, cardName])
+}
+
+model Card {
+    id       Int    @id @default(autoincrement())
+    name     String @unique
+    maxLevel Int
+    elixir   Int?
+    rarity   String
+    iconUrl  String
+
+    playerCards PlayerCard[]
+    inDecks     PlayerDeck[]
+
+    favouriteOf Player[] @relation("FavouriteCard")
 }

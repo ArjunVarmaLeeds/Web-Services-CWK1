@@ -15,8 +15,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/health", async (req, res) => {
-  await prisma.$queryRaw`SELECT 1`;
-  res.send("DB OK");
+    await prisma.$queryRaw`SELECT 1`;
+    res.send("DB OK");
 });
 
 app.use('/api/player', playerRouter);
