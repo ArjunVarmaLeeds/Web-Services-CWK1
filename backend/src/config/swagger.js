@@ -7,7 +7,11 @@ const options = {
         info: {
             title: "Clash Intelligence API",
             version: "1.0.0",
+            description: "A set of apis to compare your favourite clash royale players!"
         },
+        servers:[
+            { url: "http://localhost:5000" }
+        ],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -18,7 +22,7 @@ const options = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: ["./src/modules/routes/*.js"],
+    apis: ["./src/routes/*.js"],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
