@@ -58,14 +58,11 @@ export const comparePlayers = catchAsync(async (req, res, next) => {
         buildPlayerMetrics(tag2)
     ]);
 
-    console.log(p1, p2);
-    
-
     const comparison = {
-        winRate: p1.winRate > p2.winRate ? p1.tag : p2.tag,
-        aggression: p1.aggression > p2.aggression ? p1.tag : p2.tag,
-        trophies: p1.trophies > p2.trophies ? p1.tag : p2.tag,
-        deckAdvantage: p1.avgElixir < p2.avgElixir ? p1.tag : p2.tag
+        winRate: p1.winRate > p2.winRate ? p1.name : p2.name,
+        aggression: p1.aggression > p2.aggression ? p1.name : p2.name,
+        trophies: p1.trophies > p2.trophies ? p1.name : p2.name,
+        deckAdvantage: p1.avgElixir < p2.avgElixir ? p1.name : p2.name
     };
 
     res.status(200).json({
