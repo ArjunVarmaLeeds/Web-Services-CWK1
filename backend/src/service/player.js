@@ -12,6 +12,15 @@ export const ingestPlayer = async (rawTag) => {
     return playerRepo.upsertPlayer(data);
 };
 
+export const playerProfile = async (tag) => {
+    if (rawTag.startsWith("%23"))
+        tag = rawTag.replace("%23", "#");
+
+    const data = await playerRepo.findByTag(tag);
+
+    return data;
+}
+
 export const ingestBattles = async (rawTag) => {
     const tag = formatTag(rawTag);
     const { data } = await getBattleLog(tag);

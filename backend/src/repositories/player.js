@@ -2,8 +2,22 @@ import { prisma } from "../config/db.js";
 import AppError from "../utils/appError.js";
 
 export const findByTag = async (tag) => {
-    const player = await prisma.player.findUnique({ where: { tag } });
+    if (tag.startsWith("%23")) tag = tag.replace("%23", "#");
+
+    const player = await prisma.player.findUnique({ 
+        where: { tag },
+        include: {
+            battles: true,
+            currentDeck: {
+                include: {
+                    card: true
+                }
+            }
+        }
+    });
+
     if (!player) throw new AppError("Player not found", 404);
+    
     return player;
 };
 

@@ -18,7 +18,9 @@ erDiagram
         INT bestTrophies
         INT wins
         INT losses
+        STRING arena
         DATETIME createdAt
+        STRING favouriteCardName FK
     }
 
     BATTLE {
@@ -28,16 +30,36 @@ erDiagram
         INT crowns
         STRING gameMode
         DATETIME createdAt
+        DATETIME battleTime
     }
 
     PLAYERCARD {
         INT id PK
         INT playerId FK
-        STRING cardName
+        STRING cardName FK
         INT level
     }
 
-    PLAYER ||--o{ BATTLE : has
+    PLAYERDECK {
+        INT id PK
+        INT playerId FK
+        STRING cardName FK
+    }
+
+    CARD {
+        INT id PK
+        STRING name
+        INT maxLevel
+        INT elixir
+        STRING rarity
+        STRING iconUrl
+    }
+
+    PLAYER ||--o{ BATTLE : plays
     PLAYER ||--o{ PLAYERCARD : owns
+    PLAYER ||--o{ PLAYERDECK : uses
+    CARD   ||--o{ PLAYERCARD : upgrades
+    CARD   ||--o{ PLAYERDECK : in_deck
+    CARD   ||--o{ PLAYER : favourite
 
 ```
