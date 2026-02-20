@@ -5,7 +5,7 @@ const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Valorant Intelligence API",
+            title: "Clash Intelligence API",
             version: "1.0.0",
         },
         components: {
