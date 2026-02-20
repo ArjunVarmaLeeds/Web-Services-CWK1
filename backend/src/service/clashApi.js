@@ -9,16 +9,16 @@ export const clashClient = axios.create({
 });
 
 export const getPlayer = (tag) =>
-  clashClient.get(`/players/${tag}`);
+    clashClient.get(`/players/${tag}`);
 
 export const getBattleLog = (tag) =>
-  clashClient.get(`/players/${tag}/battlelog`);
+    clashClient.get(`/players/${tag}/battlelog`);
 
 export const getCards = () =>
-  clashClient.get("/cards");
+    clashClient.get("/cards");
 
 export const getClan = (tag) =>
-  clashClient.get(`/clans/${tag}`);
+    clashClient.get(`/clans/${tag}`);
 
 export const getClanMembers = (tag) =>
-  clashClient.get(`/clans/${tag}/members`);
+    clashClient.get(`/clans/${tag}/members`);
