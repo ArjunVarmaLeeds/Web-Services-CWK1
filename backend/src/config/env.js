@@ -8,9 +8,8 @@ const cleaned = cleanEnv(process.env, {
     PORT: port({ default: 5000 }),
     DATABASE_URL: str(),
     JWT_SECRET: str(),
-    RIOT_API_KEY: str(),
-    RIOT_REGION: str({ default: "europe" }),
-    BASE_URL: str({ default: "https://europe.api.riotgames.com" })
+    BASE_URL: str({ default: "https://api.clashroyale.com/v1/" }),
+    CLASH_API_KEY: str()
 });
 
 export const env = {
@@ -21,9 +20,6 @@ export const env = {
         secret: cleaned.JWT_SECRET,
         expiresIn: "7d",
     },
-    riot: {
-        apiKey: cleaned.RIOT_API_KEY,
-        region: cleaned.RIOT_REGION,
-        baseUrl: cleaned.BASE_URL.replace('region', cleaned.RIOT_REGION)
-    },
+    baseUrl: cleaned.BASE_URL,
+    clashApiKey: cleaned.CLASH_API_KEY
 };

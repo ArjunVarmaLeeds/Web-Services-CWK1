@@ -3,70 +3,63 @@
 ```mermaid
 erDiagram
 
-    User {
-        int id PK
-        string email
-        string passwordHash
-        datetime createdAt
+    USER {
+        INT id PK
+        STRING email
+        STRING passwordHash
+        DATETIME createdAt
     }
 
-    FavoritePlayer {
-        int id PK
-        int userId FK
-        int playerId FK
+    PLAYER {
+        INT id PK
+        STRING tag
+        STRING name
+        INT trophies
+        INT bestTrophies
+        INT wins
+        INT losses
+        STRING arena
+        DATETIME createdAt
+        STRING favouriteCardName FK
     }
 
-    Player {
-        int id PK
-        string puuid
-        string gameName
-        string tagLine
-        string region
-        datetime createdAt
-        datetime lastUpdated
+    BATTLE {
+        INT id PK
+        INT playerId FK
+        STRING result
+        INT crowns
+        STRING gameMode
+        DATETIME createdAt
+        DATETIME battleTime
     }
 
-    Rank {
-        int id PK
-        int playerId FK
-        string tier
-        string rank
-        int rr
-        int wins
-        datetime updatedAt
+    PLAYERCARD {
+        INT id PK
+        INT playerId FK
+        STRING cardName FK
+        INT level
     }
 
-    Match {
-        int id PK
-        string matchId
-        string map
-        string gameMode
-        datetime startedAt
-        int duration
+    PLAYERDECK {
+        INT id PK
+        INT playerId FK
+        STRING cardName FK
     }
 
-    MatchPlayer {
-        int id PK
-        int matchId FK
-        int playerId FK
-        string agent
-        string team
-        int kills
-        int deaths
-        int assists
-        int score
-        int damage
-        float econRating
-        int firstBloods
-        boolean won
+    CARD {
+        INT id PK
+        STRING name
+        INT maxLevel
+        INT elixir
+        STRING rarity
+        STRING iconUrl
     }
 
-    User ||--o{ FavoritePlayer : has
-    Player ||--o{ FavoritePlayer : favorited
-
-    Player ||--o{ Rank : has
-
-    Match ||--o{ MatchPlayer : contains
-    Player ||--o{ MatchPlayer : participates
+    PLAYER ||--o{ BATTLE : plays
+    PLAYER ||--o{ PLAYERCARD : owns
+    PLAYER ||--o{ PLAYERDECK : uses
+    CARD   ||--o{ PLAYERCARD : upgrades
+    CARD   ||--o{ PLAYERDECK : in_deck
+    CARD   ||--o{ PLAYER : favourite
 
 ```

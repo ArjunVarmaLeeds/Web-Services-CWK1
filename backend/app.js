@@ -4,6 +4,8 @@ import { prisma } from "./src/config/db.js";
 import { swaggerSpec, swaggerUi } from "./src/config/swagger.js";
 import authRoutes from "./src/routes/auth.js"
 import { errorHandler } from "./src/middleware/errorHandler.js";
+import playerRouter from "./src/routes/players.js"
+import cardRouter from "./src/routes/cards.js";
 
 const app = express();
 
@@ -14,9 +16,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/health", async (req, res) => {
-  await prisma.$queryRaw`SELECT 1`;
-  res.send("DB OK");
+    await prisma.$queryRaw`SELECT 1`;
+    res.send("DB OK");
 });
+
+app.use('/api/player', playerRouter);
+app.use('/api/cards', cardRouter);
 
 app.use(errorHandler);
 
