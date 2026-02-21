@@ -1,7 +1,14 @@
 import { Router } from "express";
 import { authenticateToken } from "../middleware/auth.js";
-import { getCardIntelligence, getOverview, getPlaystyle, ingestBattles, ingestPlayer, getPlayerProfile, comparePlayers } 
-from "../controller/player.js";
+import {
+  getCardIntelligence,
+  getOverview,
+  getPlaystyle,
+  ingestBattles,
+  ingestPlayer,
+  getPlayerProfile,
+  comparePlayers
+} from "../controller/player.js";
 
 const router = Router();
 
@@ -10,8 +17,175 @@ const router = Router();
  * tags:
  *   name: Players
  *   description: Player analytics and ingestion endpoints
+ *
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ *   schemas:
+ *     PlayerProfile:
+ *       type: object
+ *       properties:
+ *         tag:
+ *           type: string
+ *           example: "#ABC123"
+ *         name:
+ *           type: string
+ *           example: Arjun
+ *         trophies:
+ *           type: integer
+ *           example: 7500
+ *         bestTrophies:
+ *           type: integer
+ *           example: 8000
+ *         wins:
+ *           type: integer
+ *           example: 700
+ *         losses:
+ *           type: integer
+ *           example: 500
+ *         arena:
+ *           type: string
+ *           example: Executioner's Kitchen
+ *         createdAt:
+ *           type: string
+ *           example: 2026-02-18T23:59:54.773Z
+ *         favouriteCard:
+ *           type: string
+ *           example: Witch
+ *         battles:
+ *           type: array
+ *           items:
+ *             type: object
+ *
+ *     Overview:
+ *       type: object
+ *       properties:
+ *         trophies:
+ *           type: integer
+ *           example: 7500
+ *         bestTrophies:
+ *           type: integer
+ *           example: 8000
+ *         winRate:
+ *           type: number
+ *           example: 0.64
+ *
+ *     Playstyle:
+ *       type: object
+ *       properties:
+ *         aggressionScore:
+ *           type: number
+ *           example: 2.1
+ *         playstyle:
+ *           type: string
+ *           example: AGGRO
+ *         totalBattles:
+ *           type: number
+ *           example: 90
+ *         consistencyScore:
+ *           type: number
+ *           example: 0.5
+ *         favouriteGameMode:
+ *           type: number
+ *           example: Ladder
+ *   
+ *     CardIntelligence:
+ *       type: object
+ *       properties:
+ *         deck:
+ *           type: object
+ *           properties:
+ *         averageElixir:
+ *           type: number
+ *           example: 4
+ *         cycleCardCount:
+ *           type: integer
+ *           example: 0
+ *         rarityDistribution:
+ *           type: object
+ *         additionalProperties:
+ *           type: integer
+ *           example:
+ *             rare: 3
+ *             epic: 3
+ *             common: 1
+ *             legendary: 1
+ *         type:
+ *           type: string
+ *           example: BEATDOWN
+ *         cards:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 example: 41
+ *               name:
+ *                 type: string
+ *                 example: Dart Goblin
+ *               maxLevel:
+ *                 type: integer
+ *                 example: 14
+ *               elixir:
+ *                 type: integer
+ *                 example: 3
+ *               rarity:
+ *                 type: string
+ *                 example: rare
+ *               iconUrl:
+ *                 type: string
+ *                 example: https://api-assets.clashroyale.com/cards/300/example.png
+ *         progression:
+ *           type: object
+ *           properties:
+ *             averageCardLevel:
+ *               type: number
+ *               example: 5.85
+ *             totalCardsOwned:
+ *               type: integer
+ *               example: 106
+ *             mostUpgradedCard:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: Bats
+ *                 level:
+ *                   type: integer
+ *                   example: 12
+ *
+ *             favourites:
+ *               type: object
+ *               properties:
+ *                 supercellFavourite:
+ *                   type: string
+ *                   example: Witch
+ *
+ *     PlayerComparison:
+ *       type: object
+ *       properties:
+ *         player1:
+ *           type: object
+ *         player2:
+ *           type: object
+ *         comparison:
+ *           type: object
  */
 
+/**
+ * 🔐 All routes below require JWT.
+ * 
+ * HOW TO AUTHORIZE:
+ * 1. Call /api/auth/login
+ * 2. Copy the token
+ * 3. Click "Authorize" in Swagger UI
+ * 4. Enter: Bearer <your_token>
+ */
 router.use(authenticateToken);
 
 /**
@@ -28,16 +202,20 @@ router.use(authenticateToken);
  *         required: true
  *         schema:
  *           type: string
- *         description: First player tag
+ *           example: "%23PLAYER1"
  *       - in: query
  *         name: tag2
  *         required: true
  *         schema:
  *           type: string
- *         description: Second player tag
+ *           example: "%23PLAYER2"
  *     responses:
  *       200:
  *         description: Comparison result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PlayerComparison'
  */
 router.get("/compare", comparePlayers);
 
@@ -55,9 +233,14 @@ router.get("/compare", comparePlayers);
  *         required: true
  *         schema:
  *           type: string
+ *           example: "%23ABC123"
  *     responses:
  *       200:
  *         description: Player overview metrics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Overview'
  */
 router.get("/:tag/overview", getOverview);
 
@@ -75,9 +258,14 @@ router.get("/:tag/overview", getOverview);
  *         required: true
  *         schema:
  *           type: string
+ *           example: "%23ABC123"
  *     responses:
  *       200:
  *         description: Playstyle metrics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Playstyle'
  */
 router.get("/:tag/playstyle", getPlaystyle);
 
@@ -85,7 +273,7 @@ router.get("/:tag/playstyle", getPlaystyle);
  * @swagger
  * /api/player/{tag}/cardIntelligence:
  *   get:
- *     summary: Get card and deck intelligence for a player
+ *     summary: Get card and deck intelligence
  *     tags: [Players]
  *     security:
  *       - bearerAuth: []
@@ -95,9 +283,14 @@ router.get("/:tag/playstyle", getPlaystyle);
  *         required: true
  *         schema:
  *           type: string
+ *           example: "%23ABC123"
  *     responses:
  *       200:
- *         description: Card intelligence data
+ *         description: Card intelligence
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CardIntelligence'
  */
 router.get("/:tag/cardIntelligence", getCardIntelligence);
 
@@ -106,6 +299,7 @@ router.get("/:tag/cardIntelligence", getCardIntelligence);
  * /api/player/ingest/{tag}:
  *   post:
  *     summary: Ingest player data from Clash Royale API
+ *     description: Fetches player data from the external API and stores it in the local database. Existing records are updated.
  *     tags: [Players]
  *     security:
  *       - bearerAuth: []
@@ -115,9 +309,40 @@ router.get("/:tag/cardIntelligence", getCardIntelligence);
  *         required: true
  *         schema:
  *           type: string
+ *           example: "%2320RGGRCJJ9"
+ *         description: Clash Royale player tag (URL encoded)
  *     responses:
  *       200:
  *         description: Player successfully ingested
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   $ref: '#/components/schemas/PlayerProfile'
+ *             example:
+ *               status: success
+ *               data:
+ *                 id: 2
+ *                 tag: "#20RGGRCJJ9"
+ *                 name: OsamaBinSaggin
+ *                 trophies: 5707
+ *                 bestTrophies: 5859
+ *                 wins: 757
+ *                 losses: 593
+ *                 arena: Executioner's Kitchen
+ *                 createdAt: "2026-02-18T23:59:54.773Z"
+ *                 favouriteCardName: Witch
+ *       401:
+ *         description: Unauthorized – JWT missing or invalid
+ *       404:
+ *         description: Player not found in external API
+ *       500:
+ *         description: Server error
  */
 router.post("/ingest/:tag", ingestPlayer);
 
@@ -126,6 +351,7 @@ router.post("/ingest/:tag", ingestPlayer);
  * /api/player/ingest/battles/{tag}:
  *   post:
  *     summary: Ingest player battle log
+ *     description: Fetches the latest battle log for a player and stores new battles in the database.
  *     tags: [Players]
  *     security:
  *       - bearerAuth: []
@@ -135,9 +361,31 @@ router.post("/ingest/:tag", ingestPlayer);
  *         required: true
  *         schema:
  *           type: string
+ *           example: "%2320RGGRCJJ9"
+ *         description: Clash Royale player tag (URL encoded)
  *     responses:
  *       200:
  *         description: Battles successfully ingested
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 count:
+ *                   type: integer
+ *                   example: 35
+ *             example:
+ *               status: success
+ *               count: 35
+ *       401:
+ *         description: Unauthorized – JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.post("/ingest/battles/:tag", ingestBattles);
 
@@ -149,15 +397,13 @@ router.post("/ingest/battles/:tag", ingestBattles);
  *     tags: [Players]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: tag
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: Player profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PlayerProfile'
  */
 router.get("/:tag", getPlayerProfile);
 

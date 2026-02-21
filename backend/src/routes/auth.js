@@ -37,8 +37,9 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             example:
- *               status: success
- *               message: User created successfully
+ *               id: 2
+ *               email: test@example.com
+ *               createdAt: 2026-02-21T16:41:07.843Z
  *       400:
  *         description: Validation error
  *       409:
@@ -72,7 +73,6 @@ router.post("/register", authController.register);
  *         content:
  *           application/json:
  *             example:
- *               status: success
  *               token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       401:
  *         description: Invalid credentials

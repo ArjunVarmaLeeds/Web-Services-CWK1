@@ -9,12 +9,13 @@ import { analyzeDeck } from "../utils/deckAnalyser.js";
 export const ingestPlayer = async (rawTag) => {
     const tag = formatTag(rawTag);
     const { data } = await getPlayer(tag);
+    
     return playerRepo.upsertPlayer(data);
 };
 
 export const playerProfile = async (tag) => {
-    if (rawTag.startsWith("%23"))
-        tag = rawTag.replace("%23", "#");
+    if (tag.startsWith("%23"))
+        tag = tag.replace("%23", "#");
 
     const data = await playerRepo.findByTag(tag);
 
@@ -25,7 +26,8 @@ export const ingestBattles = async (rawTag) => {
     const tag = formatTag(rawTag);
     const { data } = await getBattleLog(tag);
 
-    const playerTag = data?.[0]?.team?.[0]?.tag;
+    const playerTag = tag;
+    
     if (!playerTag) throw new AppError("Invalid battle data", 400);
 
     const player = await playerRepo.findByTag(playerTag);
