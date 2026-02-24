@@ -109,8 +109,8 @@ erDiagram
 ### Clone the repository
 
 ``` bash
-git clone <your-repo-url>
-cd Web-Services-CWK1
+git clone https://github.com/ArjunVarmaLeeds/Web-Services-CWK1.git
+cd Web-Services-CWK1/backend
 ```
 
 ------------------------------------------------------------------------
@@ -232,5 +232,5 @@ After starting the server:
 
 ## Author
 
-Asha Varma\
+Arjun Varma\
 University of Leeds -- Web Services Coursework
