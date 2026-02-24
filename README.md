@@ -43,14 +43,14 @@ The database is designed using a **normalised relational model**.
 erDiagram
 
     USER {
-        INT id PK
+        INT id
         STRING email
         STRING passwordHash
         DATETIME createdAt
     }
 
     PLAYER {
-        INT id PK
+        INT id
         STRING tag
         STRING name
         INT trophies
@@ -59,12 +59,12 @@ erDiagram
         INT losses
         STRING arena
         DATETIME createdAt
-        STRING favouriteCardName FK
+        STRING favouriteCardName
     }
 
     BATTLE {
-        INT id PK
-        INT playerId FK
+        INT id
+        INT playerId
         STRING result
         INT crowns
         STRING gameMode
@@ -73,20 +73,20 @@ erDiagram
     }
 
     PLAYERCARD {
-        INT id PK
-        INT playerId FK
-        STRING cardName FK
+        INT id
+        INT playerId
+        STRING cardName
         INT level
     }
 
     PLAYERDECK {
-        INT id PK
-        INT playerId FK
-        STRING cardName FK
+        INT id
+        INT playerId
+        STRING cardName
     }
 
     CARD {
-        INT id PK
+        INT id
         STRING name
         INT maxLevel
         INT elixir
@@ -94,12 +94,12 @@ erDiagram
         STRING iconUrl
     }
 
-    PLAYER ||--o{ BATTLE : plays
+    PLAYER ||--o{ BATTLE : has
     PLAYER ||--o{ PLAYERCARD : owns
     PLAYER ||--o{ PLAYERDECK : uses
-    CARD   ||--o{ PLAYERCARD : upgrades
-    CARD   ||--o{ PLAYERDECK : in_deck
-    CARD   ||--o{ PLAYER : favourite
+    CARD ||--o{ PLAYERCARD : collection
+    CARD ||--o{ PLAYERDECK : deck
+    CARD ||--o{ PLAYER : favourite
 ```
 
 ------------------------------------------------------------------------
