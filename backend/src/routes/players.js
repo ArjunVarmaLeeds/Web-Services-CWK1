@@ -29,156 +29,236 @@ const router = Router();
  *     PlayerProfile:
  *       type: object
  *       properties:
- *         tag:
+ *         status:
  *           type: string
- *           example: "#ABC123"
- *         name:
- *           type: string
- *           example: Arjun
- *         trophies:
- *           type: integer
- *           example: 7500
- *         bestTrophies:
- *           type: integer
- *           example: 8000
- *         wins:
- *           type: integer
- *           example: 700
- *         losses:
- *           type: integer
- *           example: 500
- *         arena:
- *           type: string
- *           example: Executioner's Kitchen
- *         createdAt:
- *           type: string
- *           example: 2026-02-18T23:59:54.773Z
- *         favouriteCard:
- *           type: string
- *           example: Witch
- *         battles:
- *           type: array
- *           items:
- *             type: object
+ *           example: success
+ *         player:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 1
+ *             tag:
+ *               type: string
+ *               example: "#ABC123"
+ *             name:
+ *               type: string
+ *               example: Arjun
+ *             trophies:
+ *               type: integer
+ *               example: 7500
+ *             bestTrophies:
+ *               type: integer
+ *               example: 8000
+ *             wins:
+ *               type: integer
+ *               example: 700
+ *             losses:
+ *               type: integer
+ *               example: 500
+ *             arena:
+ *               type: string
+ *               example: Executioner's Kitchen
+ *             createdAt:
+ *               type: string
+ *               example: 2026-02-18T23:59:54.773Z
+ *             favouriteCard:
+ *               type: string
+ *               example: Witch
+ *             battles:
+ *               type: array
+ *               items:
+ *                 type: object
+ *             currentDeck:
+ *               type: array
+ *               items:
+ *                 type: object
  *
  *     Overview:
  *       type: object
  *       properties:
- *         trophies:
- *           type: integer
- *           example: 7500
- *         bestTrophies:
- *           type: integer
- *           example: 8000
- *         winRate:
- *           type: number
- *           example: 0.64
+ *         status:
+ *           type: string
+ *           example: success
+ *         data:
+ *           type: object
+ *           properties:
+ *             trophies:
+ *               type: integer
+ *               example: 7500
+ *             bestTrophies:
+ *               type: integer
+ *               example: 8000
+ *             winRate:
+ *               type: number
+ *               example: 0.64
  *
  *     Playstyle:
  *       type: object
  *       properties:
- *         aggressionScore:
- *           type: number
- *           example: 2.1
- *         playstyle:
+ *         status:
  *           type: string
- *           example: AGGRO
- *         totalBattles:
- *           type: number
- *           example: 90
- *         consistencyScore:
- *           type: number
- *           example: 0.5
- *         favouriteGameMode:
- *           type: number
- *           example: Ladder
+ *           example: success
+ *         data:
+ *           type: object
+ *           properties:
+ *             aggressionScore:
+ *               type: number
+ *               example: 2.1
+ *             playstyle:
+ *               type: string
+ *               example: AGGRO
+ *             totalBattles:
+ *               type: number
+ *               example: 90
+ *             consistencyScore:
+ *               type: number
+ *               example: 0.5
+ *             favouriteGameMode:
+ *               type: number
+ *               example: Ladder
  *   
  *     CardIntelligence:
  *       type: object
  *       properties:
- *         deck:
- *           type: object
- *           properties:
- *         averageElixir:
- *           type: number
- *           example: 4
- *         cycleCardCount:
- *           type: integer
- *           example: 0
- *         rarityDistribution:
- *           type: object
- *         additionalProperties:
- *           type: integer
- *           example:
- *             rare: 3
- *             epic: 3
- *             common: 1
- *             legendary: 1
- *         type:
+ *         status:
  *           type: string
- *           example: BEATDOWN
- *         cards:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *                 example: 41
- *               name:
- *                 type: string
- *                 example: Dart Goblin
- *               maxLevel:
- *                 type: integer
- *                 example: 14
- *               elixir:
- *                 type: integer
- *                 example: 3
- *               rarity:
- *                 type: string
- *                 example: rare
- *               iconUrl:
- *                 type: string
- *                 example: https://api-assets.clashroyale.com/cards/300/example.png
- *         progression:
+ *           example: success
+ *         data:
  *           type: object
  *           properties:
- *             averageCardLevel:
+ *             deck:
+ *               type: object
+ *             averageElixir:
  *               type: number
- *               example: 5.85
- *             totalCardsOwned:
+ *               example: 4
+ *             cycleCardCount:
  *               type: integer
- *               example: 106
- *             mostUpgradedCard:
+ *               example: 0
+ *             rarityDistribution:
+ *               type: object
+ *             additionalProperties:
+ *               type: integer
+ *               example:
+ *                 rare: 3
+ *                 epic: 3
+ *                 common: 1
+ *                 legendary: 1
+ *             type:
+ *               type: string
+ *               example: BEATDOWN
+ *             cards:
+ *               type: array
+ *               items:
+ *                 type: object
+ *             progression:
  *               type: object
  *               properties:
- *                 name:
- *                   type: string
- *                   example: Bats
- *                 level:
+ *                 averageCardLevel:
+ *                   type: number
+ *                   example: 5.85
+ *                 totalCardsOwned:
  *                   type: integer
- *                   example: 12
- *
- *             favourites:
- *               type: object
- *               properties:
- *                 supercellFavourite:
- *                   type: string
- *                   example: Witch
+ *                   example: 106
+ *                 mostUpgradedCard:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: Bats
+ *                     level:
+ *                       type: integer
+ *                       example: 12
+ *                 favourites:
+ *                   type: object
+ *                   properties:
+ *                     supercellFavourite:
+ *                       type: string
+ *                       example: Witch
  *
  *     PlayerComparison:
  *       type: object
  *       properties:
- *         player1:
+ *         status:
+ *           type: string
+ *           example: success
+ *         data:
  *           type: object
- *         player2:
- *           type: object
- *         comparison:
- *           type: object
+ *           properties:
+ *             player1:
+ *               type: object
+ *               properties:
+ *                 tag:
+ *                   type: string
+ *                   example: "#ABC123"
+ *                 name:
+ *                   type: string
+ *                   example: Arjun
+ *                 trophies:
+ *                   type: integer
+ *                   example: 7500
+ *                 winRate:
+ *                   type: number
+ *                   example: 0.64
+ *                 aggression:
+ *                   type: number
+ *                   example: 2.1
+ *                 playstyle:
+ *                   type: string
+ *                   example: AGGRO
+ *                 avgElixir:
+ *                   type: number
+ *                   example: 4.2
+ *             player2:
+ *               type: object
+ *               properties:
+ *                 tag:
+ *                   type: string
+ *                   example: "#DEF456"
+ *                 name:
+ *                   type: string
+ *                   example: Sam
+ *                 trophies:
+ *                   type: integer
+ *                   example: 7200
+ *                 winRate:
+ *                   type: number
+ *                   example: 0.58
+ *                 aggression:
+ *                   type: number
+ *                   example: 1.8
+ *                 playstyle:
+ *                   type: string
+ *                   example: BALANCED
+ *                 avgElixir:
+ *                   type: number
+ *                   example: 4.5
+ *             comparison:
+ *               type: object
+ *               properties:
+ *                 winRate:
+ *                   type: string
+ *                   example: Arjun
+ *                 aggression:
+ *                   type: string
+ *                   example: Sam
+ *                 trophies:
+ *                   type: string
+ *                   example: Arjun
+ *                 deckAdvantage:
+ *                   type: string
+ *                   example: Sam
+ *     
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: Player not found
  */
 
 /**
- * 🔐 All routes below require JWT.
+ * All routes below require JWT.
  * 
  * HOW TO AUTHORIZE:
  * 1. Call /api/auth/login
@@ -216,6 +296,18 @@ router.use(authenticateToken);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/PlayerComparison'
+ *       400:
+ *         description: Bad request - tag1 and tag2 are required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized - JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.get("/compare", comparePlayers);
 
@@ -241,6 +333,12 @@ router.get("/compare", comparePlayers);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Overview'
+ *       401:
+ *         description: Unauthorized - JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.get("/:tag/overview", getOverview);
 
@@ -266,6 +364,18 @@ router.get("/:tag/overview", getOverview);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Playstyle'
+ *       400:
+ *         description: Not enough battles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized - JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.get("/:tag/playstyle", getPlaystyle);
 
@@ -291,6 +401,18 @@ router.get("/:tag/playstyle", getPlaystyle);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/CardIntelligence'
+ *       400:
+ *         description: No deck data available
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: Unauthorized - JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.get("/:tag/cardIntelligence", getCardIntelligence);
 
@@ -404,6 +526,12 @@ router.post("/ingest/battles/:tag", ingestBattles);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/PlayerProfile'
+ *       401:
+ *         description: Unauthorized - JWT missing or invalid
+ *       404:
+ *         description: Player not found
+ *       500:
+ *         description: Server error
  */
 router.get("/:tag", getPlayerProfile);
 

@@ -170,6 +170,11 @@ Swagger UI:
 
     http://localhost:5000/api-docs
 
+PDF Documentation:
+
+    [api-docs.pdf](docs/api-docs.pdf)
+
+
 ------------------------------------------------------------------------
 
 ## Initial Data Sync (Required)

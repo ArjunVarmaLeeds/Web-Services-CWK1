@@ -1,0 +1,940 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Clash Intelligence API",
+    "version": "1.0.0",
+    "description": "\n                A set of apis to compare your favourite clash royale players!\n                Main capabilities:\n                • Player ingestion from the official API  \n                • Battle log analytics  \n                • Deck intelligence and progression tracking  \n                • Playstyle classification  \n                • Player comparison engine  \n\n                Typical workflow:\n                1. Authenticate\n                2. Sync cards\n                3. Ingest player\n                4. Ingest battles\n                5. Access analytics endpoints\n                \n                Note on Authentication:\n                All /api/player and /api/cards routes require a JWT authentication. To obtain a JWT token, follow the steps below -\n                1. Register → POST /api/auth/register  \n                2. Login → POST /api/auth/login  \n                3. Copy the returned JWT token  \n                4. Click **Authorize** in Swagger  \n                5. Enter: Bearer <token>"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Local development server running on port 5000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "PlayerProfile": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "player": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 1
+              },
+              "tag": {
+                "type": "string",
+                "example": "#ABC123"
+              },
+              "name": {
+                "type": "string",
+                "example": "Arjun"
+              },
+              "trophies": {
+                "type": "integer",
+                "example": 7500
+              },
+              "bestTrophies": {
+                "type": "integer",
+                "example": 8000
+              },
+              "wins": {
+                "type": "integer",
+                "example": 700
+              },
+              "losses": {
+                "type": "integer",
+                "example": 500
+              },
+              "arena": {
+                "type": "string",
+                "example": "Executioner's Kitchen"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2026-02-18T23:59:54.773Z"
+              },
+              "favouriteCard": {
+                "type": "string",
+                "example": "Witch"
+              },
+              "battles": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "currentDeck": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Overview": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "trophies": {
+                "type": "integer",
+                "example": 7500
+              },
+              "bestTrophies": {
+                "type": "integer",
+                "example": 8000
+              },
+              "winRate": {
+                "type": "number",
+                "example": 0.64
+              }
+            }
+          }
+        }
+      },
+      "Playstyle": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "aggressionScore": {
+                "type": "number",
+                "example": 2.1
+              },
+              "playstyle": {
+                "type": "string",
+                "example": "AGGRO"
+              },
+              "totalBattles": {
+                "type": "number",
+                "example": 90
+              },
+              "consistencyScore": {
+                "type": "number",
+                "example": 0.5
+              },
+              "favouriteGameMode": {
+                "type": "number",
+                "example": "Ladder"
+              }
+            }
+          }
+        }
+      },
+      "CardIntelligence": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "deck": {
+                "type": "object"
+              },
+              "averageElixir": {
+                "type": "number",
+                "example": 4
+              },
+              "cycleCardCount": {
+                "type": "integer",
+                "example": 0
+              },
+              "rarityDistribution": {
+                "type": "object"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "example": {
+                  "rare": 3,
+                  "epic": 3,
+                  "common": 1,
+                  "legendary": 1
+                }
+              },
+              "type": {
+                "type": "string",
+                "example": "BEATDOWN"
+              },
+              "cards": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "progression": {
+                "type": "object",
+                "properties": {
+                  "averageCardLevel": {
+                    "type": "number",
+                    "example": 5.85
+                  },
+                  "totalCardsOwned": {
+                    "type": "integer",
+                    "example": 106
+                  },
+                  "mostUpgradedCard": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Bats"
+                      },
+                      "level": {
+                        "type": "integer",
+                        "example": 12
+                      }
+                    }
+                  },
+                  "favourites": {
+                    "type": "object",
+                    "properties": {
+                      "supercellFavourite": {
+                        "type": "string",
+                        "example": "Witch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PlayerComparison": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "player1": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string",
+                    "example": "#ABC123"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Arjun"
+                  },
+                  "trophies": {
+                    "type": "integer",
+                    "example": 7500
+                  },
+                  "winRate": {
+                    "type": "number",
+                    "example": 0.64
+                  },
+                  "aggression": {
+                    "type": "number",
+                    "example": 2.1
+                  },
+                  "playstyle": {
+                    "type": "string",
+                    "example": "AGGRO"
+                  },
+                  "avgElixir": {
+                    "type": "number",
+                    "example": 4.2
+                  }
+                }
+              },
+              "player2": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string",
+                    "example": "#DEF456"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Sam"
+                  },
+                  "trophies": {
+                    "type": "integer",
+                    "example": 7200
+                  },
+                  "winRate": {
+                    "type": "number",
+                    "example": 0.58
+                  },
+                  "aggression": {
+                    "type": "number",
+                    "example": 1.8
+                  },
+                  "playstyle": {
+                    "type": "string",
+                    "example": "BALANCED"
+                  },
+                  "avgElixir": {
+                    "type": "number",
+                    "example": 4.5
+                  }
+                }
+              },
+              "comparison": {
+                "type": "object",
+                "properties": {
+                  "winRate": {
+                    "type": "string",
+                    "example": "Arjun"
+                  },
+                  "aggression": {
+                    "type": "string",
+                    "example": "Sam"
+                  },
+                  "trophies": {
+                    "type": "string",
+                    "example": "Arjun"
+                  },
+                  "deckAdvantage": {
+                    "type": "string",
+                    "example": "Sam"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Player not found"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "test@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "strongPassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "email": "test@example.com",
+                  "createdAt": "2026-02-21T16:41:07.843Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login and obtain JWT token",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "test@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "strongPassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Get current authenticated user",
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authenticated user profile",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "email": "test@example.com",
+                  "createdAt": "2026-01-01T12:00:00.000Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT missing or invalid"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/cards/sync": {
+      "post": {
+        "summary": "Synchronise Clash Royale card metadata",
+        "description": "Fetches all card data from the Clash Royale API and stores it in the local database. This is required before ingesting players to maintain referential integrity.",
+        "tags": [
+          "Cards"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card metadata successfully synchronised",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "totalFromAPI": 128,
+                  "insertedIntoDB": 128
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT missing or invalid"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/compare": {
+      "get": {
+        "summary": "Compare two players",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tag1",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%23PLAYER1"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tag2",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%23PLAYER2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comparison result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerComparison"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - tag1 and tag2 are required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/{tag}/overview": {
+      "get": {
+        "summary": "Get player performance overview",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tag",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%23ABC123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player overview metrics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Overview"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/{tag}/playstyle": {
+      "get": {
+        "summary": "Get player playstyle analytics",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tag",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%23ABC123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playstyle metrics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playstyle"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not enough battles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/{tag}/cardIntelligence": {
+      "get": {
+        "summary": "Get card and deck intelligence",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tag",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%23ABC123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card intelligence",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardIntelligence"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No deck data available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/ingest/{tag}": {
+      "post": {
+        "summary": "Ingest player data from Clash Royale API",
+        "description": "Fetches player data from the external API and stores it in the local database. Existing records are updated.",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tag",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%2320RGGRCJJ9"
+            },
+            "description": "Clash Royale player tag (URL encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player successfully ingested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PlayerProfile"
+                    }
+                  }
+                },
+                "example": {
+                  "status": "success",
+                  "data": {
+                    "id": 2,
+                    "tag": "#20RGGRCJJ9",
+                    "name": "OsamaBinSaggin",
+                    "trophies": 5707,
+                    "bestTrophies": 5859,
+                    "wins": 757,
+                    "losses": 593,
+                    "arena": "Executioner's Kitchen",
+                    "createdAt": "2026-02-18T23:59:54.773Z",
+                    "favouriteCardName": "Witch"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found in external API"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/ingest/battles/{tag}": {
+      "post": {
+        "summary": "Ingest player battle log",
+        "description": "Fetches the latest battle log for a player and stores new battles in the database.",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tag",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "%2320RGGRCJJ9"
+            },
+            "description": "Clash Royale player tag (URL encoded)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Battles successfully ingested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 35
+                    }
+                  }
+                },
+                "example": {
+                  "status": "success",
+                  "count": 35
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/player/{tag}": {
+      "get": {
+        "summary": "Get stored player profile",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerProfile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - JWT missing or invalid"
+          },
+          "404": {
+            "description": "Player not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Checks database connectivity",
+        "responses": {
+          "200": {
+            "description": "Database is healthy",
+            "content": {
+              "text/plain": {
+                "example": "DB OK"
+              }
+            }
+          },
+          "500": {
+            "description": "Database connection failed"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication and user management"
+    },
+    {
+      "name": "Cards",
+      "description": "Card metadata synchronisation"
+    },
+    {
+      "name": "Players",
+      "description": "Player analytics and ingestion endpoints"
+    }
+  ]
+}

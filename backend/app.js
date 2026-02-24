@@ -15,6 +15,21 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Health check endpoint
+ *     description: Checks database connectivity
+ *     responses:
+ *       200:
+ *         description: Database is healthy
+ *         content:
+ *           text/plain:
+ *             example: DB OK
+ *       500:
+ *         description: Database connection failed
+ */
 app.get("/health", async (req, res) => {
     await prisma.$queryRaw`SELECT 1`;
     res.send("DB OK");

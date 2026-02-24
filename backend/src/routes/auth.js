@@ -44,6 +44,8 @@ const router = express.Router();
  *         description: Validation error
  *       409:
  *         description: User already exists
+ *       500:
+ *         description: Server error
  */
 router.post("/register", authController.register);
 
@@ -76,6 +78,8 @@ router.post("/register", authController.register);
  *               token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       401:
  *         description: Invalid credentials
+ *       500:
+ *         description: Server error
  */
 router.post("/login", authController.login);
 
@@ -98,6 +102,8 @@ router.post("/login", authController.login);
  *               createdAt: 2026-01-01T12:00:00.000Z
  *       401:
  *         description: Unauthorized – JWT missing or invalid
+ *       500:
+ *         description: Server error
  */
 router.get("/me", authenticateToken, authController.me);
 

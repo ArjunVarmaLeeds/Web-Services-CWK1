@@ -31,27 +31,35 @@ export const ingestBattles = catchAsync(async (req, res) => {
 });
 
 export const getOverview = catchAsync(async (req, res) => {
-    const overview = await playerService.getOverview(req.params.tag);
+    const data = await playerService.getOverview(req.params.tag);
 
-    res.status(200).json(overview);
+    res.status(200).json({
+        status: "success",
+        data
+    });
 });
 
 export const getPlaystyle = catchAsync(async (req, res) => {
     const data = await playerService.getPlaystyle(req.params.tag);
-    res.status(200).json(data);
+    res.status(200).json({
+        status: "success",
+        data
+    });
 });
 
 export const getCardIntelligence = catchAsync(async (req, res) => {
     const data = await playerService.getCardIntelligence(req.params.tag);
-    res.status(200).json(data);
+    res.status(200).json({
+        status: 'success',
+        data
+    });
 });
 
 export const comparePlayers = catchAsync(async (req, res, next) => {
     let { tag1, tag2 } = req.query;
 
-    if (!tag1 || !tag2) {
+    if (!tag1 || !tag2) 
         return next(new AppError("tag1 and tag2 are required", 400));
-    }
 
     const [p1, p2] = await Promise.all([
         buildPlayerMetrics(tag1),
@@ -66,8 +74,11 @@ export const comparePlayers = catchAsync(async (req, res, next) => {
     };
 
     res.status(200).json({
-        player1: p1,
-        player2: p2,
-        comparison
+        status: 'success',
+        data: {
+            player1: p1,
+            player2: p2,
+            comparison
+        }
     });
 });
