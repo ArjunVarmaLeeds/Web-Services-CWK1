@@ -155,7 +155,7 @@ npx prisma studio
 ### Start the server
 
 ``` bash
-npm run dev
+npm run start:dev
 ```
 
 Server runs at:
@@ -174,6 +174,7 @@ PDF Documentation:
 
     [api-docs.pdf](docs/api-docs.pdf)
 
+> *Note: The player and card apis require a valid JWT authentication token. Make an account with your email and password and then login to obtain a JWT token before using the player and card apis.
 
 ------------------------------------------------------------------------
 
