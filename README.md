@@ -105,6 +105,7 @@ erDiagram
 ------------------------------------------------------------------------
 
 ## Setup Instructions
+> **Note**: The clash APIs will not work without a valid API key. The API key can be obtained from [here](https://developer.clashroyale.com/#/documentation) by following the instructions in the documentation. The authentication APIs will work but **without the clash API key, the player and card apis will NOT work.**
 
 ### Clone the repository
 
@@ -125,7 +126,7 @@ npm install
 
 ### Configure environment variables
 
-Create a `.env` file in the root:
+Create a `.env` file in the backend folder:
 
 ``` env
 DATABASE_URL="file:./dev.db"
