@@ -133,6 +133,8 @@ DATABASE_URL="file:./dev.db"
 JWT_SECRET=your_jwt_secret
 CLASH_API_KEY=your_clash_api_key
 PORT=5000
+BASE_URL=https://api.clashroyale.com/v1
+NODE_ENV=development
 ```
 
 ------------------------------------------------------------------------
