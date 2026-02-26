@@ -181,6 +181,12 @@ PDF Documentation:
 
 ------------------------------------------------------------------------
 
+## Health Check
+
+    GET /health
+
+------------------------------------------------------------------------
+
 ## Initial Data Sync (Required)
 
 After starting the server:
@@ -277,12 +283,6 @@ response structure. Feel free to extend tests as you add features.
   Express app directly.
 - If network requests are unreliable, consider using `nock` or another
   HTTP mocking library to stub external API calls.
-
-------------------------------------------------------------------------
-
-## Health Check
-
-    GET /health
 
 ------------------------------------------------------------------------
 
