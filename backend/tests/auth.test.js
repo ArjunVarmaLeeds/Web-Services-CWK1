@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../app.js";
 import { log } from "console";
+import { getAuthToken } from "./helpers/authHelper.js";
 
 describe("Auth API", () => {
     it("should register a user", async () => {
@@ -25,5 +26,20 @@ describe("Auth API", () => {
         });
 
         expect(res.body.token).toBeDefined();
+    });
+
+    it("should return current user when authenticated", async () => {
+        const token = await getAuthToken();
+        const res = await request(app)
+            .get("/api/auth/me")
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.email).toBeDefined();
+    });
+
+    it("should block access to /me when unauthenticated", async () => {
+        const res = await request(app).get("/api/auth/me");
+        expect(res.statusCode).toBe(401);
     });
 });
