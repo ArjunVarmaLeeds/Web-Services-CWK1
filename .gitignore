@@ -137,3 +137,9 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Old migration files
+backend/prisma/migrations_old
+
+# Db files
+backend/prisma/dev.db

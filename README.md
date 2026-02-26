@@ -128,7 +128,7 @@ npm install
 Create a `.env` file in the root:
 
 ``` env
-DATABASE_URL="mysql://USER:PASSWORD@localhost:3306/clash_intel"
+DATABASE_URL="file:./dev.db"
 JWT_SECRET=your_jwt_secret
 CLASH_API_KEY=your_clash_api_key
 PORT=5000

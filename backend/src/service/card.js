@@ -18,7 +18,7 @@ export const syncCards = async (req, res, next) => {
 
     const result = await prisma.card.createMany({
         data: cards,
-        skipDuplicates: true
+        // skipDuplicates: true
     });
 
     res.status(200).json({

@@ -52,7 +52,10 @@ export const upsertPlayer = (data) =>
         return player;
 });
 
-export const insertBattles = (battles) => prisma.battle.createMany({ data: battles, skipDuplicates: true});
+export const insertBattles = (battles) => prisma.battle.createMany({ 
+    data: battles, 
+    // skipDuplicates: true
+});
 
 export const getBattles = (playerId) => prisma.battle.findMany({ where: { playerId } });
 
