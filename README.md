@@ -228,6 +228,58 @@ After starting the server:
 
 ------------------------------------------------------------------------
 
+## Running the Test Suite
+
+Automated tests exercise the full REST API (including authentication,
+player ingestion, analytics and card sync) using [Jest](https://jestjs.io)
+and [SuperTest](https://github.com/visionmedia/supertest).
+
+**Prerequisites:**
+
+1. Install dependencies (`npm install`) as described above.
+2. Create a `.env` file with the same variables used for development.
+   During tests `NODE_ENV` is set to `test` automatically by the
+   `npm test` script; you can also provide a separate `DATABASE_URL`
+   pointing to a temporary SQLite file if you prefer isolation.
+3. Ensure `CLASH_API_KEY` is valid – tests will hit the real Clash Royale
+   API when ingesting players. Alternatively, mock the responses or
+   stub the network layer if running offline.
+
+**Running tests:**
+
+```bash
+cd backend
+npm test
+```
+
+The `package.json` includes the following script:
+
+```json
+"test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
+```
+
+which sets the environment and executes Jest in a single process so
+that the database file is reused correctly. All tests live under
+`backend/tests` and are automatically picked up by Jest.
+
+**What is covered:**
+
+- `auth.test.js` – registration, login and `/me` endpoint
+- `player.*.test.js` – player ingest, overview, playstyle, card
+  intelligence, battles and comparison
+
+Each spec includes unauthorised‑access checks and basic assertions on
+response structure. Feel free to extend tests as you add features.
+
+**Notes:**
+
+- Running the server separately is **not required**; tests import the
+  Express app directly.
+- If network requests are unreliable, consider using `nock` or another
+  HTTP mocking library to stub external API calls.
+
+------------------------------------------------------------------------
+
 ## Health Check
 
     GET /health
