@@ -14,3 +14,17 @@ export const getAuthToken = async () => {
 
     return res.body.token;
 };
+
+export const getAdminToken = async () => {
+    await request(app).post("/api/auth/register").send({
+        email: "admin@gmail.com",
+        password: "password123",
+    });
+
+    const res = await request(app).post("/api/auth/login").send({
+        email: "admin@gmail.com",
+        password: "pass123",
+    });
+
+    return res.body.token;
+};
