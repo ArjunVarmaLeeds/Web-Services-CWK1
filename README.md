@@ -212,6 +212,17 @@ After starting the server:
 3.  Copy JWT token
 4.  Authorize in Swagger → use protected endpoints
 
+## User Management (Admin Only)
+
+The following endpoints allow administrative control over user accounts. All
+requests require a valid JWT with the **admin@gmail.com** account.
+
+- `GET /api/users` – list all users (id, email, createdAt)
+- `GET /api/users/{id}` – fetch details of a specific user
+- `POST /api/users` – create a new user (body: `{ email, password }`)
+- `PUT /api/users/{id}` – update an existing user's email
+- `DELETE /api/users/{id}` – remove a user by id
+
 ------------------------------------------------------------------------
 
 ## Example Intelligence Endpoints
