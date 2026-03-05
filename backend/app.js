@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/auth.js"
 import { errorHandler } from "./src/middleware/errorHandler.js";
 import playerRouter from "./src/routes/players.js"
 import cardRouter from "./src/routes/cards.js";
+import userRouter from "./src/routes/user.js"
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get("/health", async (req, res) => {
 
 app.use('/api/player', playerRouter);
 app.use('/api/cards', cardRouter);
+app.use('/api/users', userRouter);
 
 app.use(errorHandler);
 
