@@ -75,7 +75,17 @@ export const getCardIntelligence = async (tag) => {
     if (!player.currentDeck.length)
         throw new AppError("No deck data available", 400);
 
-    const deckCards = player.currentDeck.map((d) => d.card);
+    // Map the deck cards to include the player's own card level where available.
+    const deckCards = player.currentDeck.map((d) => {
+        const card = d.card;
+        const ownedCard = player.cards.find((c) => c.cardName === card.name);
+
+        return {
+            ...card,
+            level: ownedCard?.level ?? null
+        };
+    });
+
     const collection = player.cards;
 
     const deckAnalysis = analyzeDeck(deckCards);
@@ -95,7 +105,11 @@ export const getCardIntelligence = async (tag) => {
             averageCardLevel: Number(avgLevel.toFixed(2)),
             totalCardsOwned: collection.length,
             mostUpgradedCard: mostUpgraded
-                ? { name: mostUpgraded.cardName, level: mostUpgraded.level }
+                ? {
+                      name: mostUpgraded.cardName,
+                      level: mostUpgraded.level,
+                      iconUrl: mostUpgraded.card?.iconUrl || null
+                  }
                 : null
         },
         favourites: {

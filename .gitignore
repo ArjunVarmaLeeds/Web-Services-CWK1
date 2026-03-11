@@ -143,3 +143,6 @@ backend/prisma/migrations_old
 
 # Db files
 backend/prisma/dev.db
+
+# Vite files
+frontend/.vite
