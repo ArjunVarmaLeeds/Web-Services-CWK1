@@ -35,14 +35,14 @@ export const Login = () => {
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 px-3">
       <div className="card p-4 shadow-lg" style={{ maxWidth: 420, width: "100%" }}>
-        <h3 className="mb-3">Welcome back</h3>
+        <h3 className="mb-3 text-white">Welcome back</h3>
         <p className="text-muted mb-4">Login to access the Clash Royale Intelligence dashboard.</p>
 
         <ErrorAlert message={error} onClose={() => setError(null)} />
 
         <form onSubmit={handleSubmit} className="mb-3">
           <div className="mb-3">
-            <label className="form-label">Email</label>
+            <label className="form-label text-white">Email</label>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -52,7 +52,7 @@ export const Login = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-3 text-white">
             <label className="form-label">Password</label>
             <input
               value={password}
